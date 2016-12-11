@@ -1,10 +1,10 @@
-package com.didikee.gifparser.gifutils;
+package com.didikee.gifparser.gifs;
 
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.didikee.gifparser.gifutils.gif.GifDecoder;
+import com.didikee.gifparser.gifs.gif.GifDecoder;
 
 import java.io.File;
 import java.io.FileOutputStream;

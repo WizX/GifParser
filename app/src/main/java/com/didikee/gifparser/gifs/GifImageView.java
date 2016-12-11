@@ -1,4 +1,4 @@
-package com.didikee.gifparser.gifutils;
+package com.didikee.gifparser.gifs;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -8,7 +8,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.ImageView;
 
-import com.didikee.gifparser.gifutils.gif.GifDecoder;
+import com.didikee.gifparser.gifs.gif.GifDecoder;
 
 public class GifImageView extends ImageView implements Runnable {
 

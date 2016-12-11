@@ -1,7 +1,9 @@
-package com.didikee.gifparser.gifutils;
+package com.didikee.gifparser.gifs;
 
 import android.graphics.Bitmap;
 import android.support.annotation.IntegerRes;
+
+import com.didikee.gifparser.gifs.interf.IGifManager;
 
 import java.io.File;
 import java.io.InputStream;
@@ -10,7 +12,7 @@ import java.io.InputStream;
  * Created by didik on 2016/12/1.
  */
 
-public class GifManager implements IGifManager{
+public class GifManager implements IGifManager {
 
     @Override
     public Bitmap getGifFrame(int index) {

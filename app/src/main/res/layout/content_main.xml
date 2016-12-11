@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     android:id="@+id/content_main"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -10,12 +10,32 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.didikee.gifparser.MainActivity"
+    tools:context="com.didikee.gifparser.ui.MainActivity"
     tools:showIn="@layout/activity_main">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello World!"/>
-</RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_container"
+        android:layout_width="match_parent"
+        android:layout_height="300dp">
+    </FrameLayout>
+
+    <Button
+        android:id="@+id/bt_parser"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="解析"
+        />
+    <Button
+        android:id="@+id/bt_open_file"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="打开文件目录"
+        />
+</LinearLayout>

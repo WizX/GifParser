@@ -1,4 +1,4 @@
-package com.didikee.gifparser.gifutils;
+package com.didikee.gifparser.gifs.interf;
 
 import android.graphics.Bitmap;
 import android.support.annotation.IntegerRes;
