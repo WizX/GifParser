@@ -29,4 +29,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
 
     compile 'com.didikee:permissionsHelper:0.1.4'
+    compile 'com.didikee:UILibrary:0.8.5'
 }
