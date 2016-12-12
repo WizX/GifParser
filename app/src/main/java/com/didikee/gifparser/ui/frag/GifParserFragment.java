@@ -9,7 +9,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -76,7 +75,12 @@ public class GifParserFragment extends BaseFragment {
 
     @Override
     public void registerListener() {
-
+        fl_container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(),"切换",Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 
@@ -162,7 +166,7 @@ public class GifParserFragment extends BaseFragment {
     private boolean displayGifFromSDCard(String gifPath) {
         if (TextUtils.isEmpty(gifPath)) return false;
         GifImageView gifImageView = new GifImageView(getContext());
-//        gifImageView.setScaleType(ImageView.ScaleType.CENTER);
+        gifImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         InputStream inputStream ;
         byte[] bytes = null;
         try {
@@ -190,7 +194,7 @@ public class GifParserFragment extends BaseFragment {
         fl_container.removeAllViews();
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams
                 .MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        params.gravity = Gravity.CENTER;
+//        params.gravity = Gravity.CENTER;
         fl_container.addView(imageView, params);
         if (imageView instanceof GifImageView) {
             ((GifImageView) imageView).startAnimation();
