@@ -31,22 +31,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     private void init() {
         tab_layout = ((TabLayout) findViewById(R.id.tab_layout));
         viewPager = ((ViewPager) findViewById(R.id.viewpager));
 
-        MainFragmentPagerAdapter pagerAdapter=new MainFragmentPagerAdapter(getSupportFragmentManager());
-        List<Fragment> fragments=new ArrayList<>();
+        MainFragmentPagerAdapter pagerAdapter = new MainFragmentPagerAdapter
+                (getSupportFragmentManager());
+        List<Fragment> fragments = new ArrayList<>();
         fragments.add(new GifParserFragment());
         fragments.add(new HistoryFragment());
         pagerAdapter.setFragments(fragments);
         viewPager.setAdapter(pagerAdapter);
         tab_layout.setupWithViewPager(viewPager);
         tab_layout.setTabMode(TabLayout.MODE_FIXED);
-//        initView();
+        tab_layout.setTabGravity(TabLayout.GRAVITY_FILL);
     }
-
 
 
     @Override

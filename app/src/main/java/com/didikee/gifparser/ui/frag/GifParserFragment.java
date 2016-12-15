@@ -59,18 +59,18 @@ public class GifParserFragment extends BaseFragment {
             }
         });
 
-        inflateView.findViewById(R.id.bt_open_file).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                boolean b = openFileAccessFileManager(testPath2);
-//                if (b){
-//                    Log.e("test","yes is open");
-//                }else {
-//                    Log.e("test","no! some error come out!");
-//                }
-                openFolder(testPath);
-            }
-        });
+//        inflateView.findViewById(R.id.bt_open_file).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////                boolean b = openFileAccessFileManager(testPath2);
+////                if (b){
+////                    Log.e("test","yes is open");
+////                }else {
+////                    Log.e("test","no! some error come out!");
+////                }
+//                openFolder(testPath);
+//            }
+//        });
     }
 
     @Override
@@ -219,5 +219,10 @@ public class GifParserFragment extends BaseFragment {
             // explorer app installed on your device
             Log.e("test", "wtf!!!");
         }
+    }
+
+    @Override
+    protected void startFlow() {
+
     }
 }

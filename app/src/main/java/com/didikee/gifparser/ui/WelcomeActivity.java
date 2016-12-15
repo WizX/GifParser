@@ -34,6 +34,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
     private void doOneThing(){
         startActivity(new Intent(this,MainActivity.class));
+        finish();
     }
 
     private void checkPermissions() {

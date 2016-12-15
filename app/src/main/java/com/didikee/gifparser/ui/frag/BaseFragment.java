@@ -38,7 +38,9 @@ public abstract class BaseFragment extends Fragment implements IBaseFragment{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         registerListener();
+        startFlow();
     }
+    protected abstract void startFlow();
 
     @Override
     public boolean getIntentData() {
