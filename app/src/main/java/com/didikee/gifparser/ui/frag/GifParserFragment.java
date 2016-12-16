@@ -18,6 +18,8 @@ import com.didikee.gifparser.files.FileUtil;
 import com.didikee.gifparser.files.Uri2Path;
 import com.didikee.gifparser.helper.GifParserHelper;
 
+import java.math.BigInteger;
+
 /**
  * Created by didik 
  * Created time 2016/12/12
@@ -28,8 +30,7 @@ public class GifParserFragment extends BaseFragment implements View.OnClickListe
 
     private FrameLayout fl_container;
     private Button bt_parser;
-    private String testPath = "/storage/emulated/0/gif/";
-    private String testPath2 = "/storage/emulated/0/ickeck/ac";
+    private String gifPath="";
     private GifParserHelper helper;
 
     @Override
@@ -58,39 +59,23 @@ public class GifParserFragment extends BaseFragment implements View.OnClickListe
 //        });
 
         helper.setDefaultFlContainer();
-
+        Log.e("test","int: "+Integer.MAX_VALUE+"big int: "+ BigInteger.ONE);
     }
 
     @Override
     public void registerListener() {
-        fl_container.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                Toast.makeText(getContext(),"切换",Toast.LENGTH_SHORT).show();
-//                showPopMenu();
-//                popMenuChooser.showPop();
-
-                final String[] haha = new String[]{
-                        "One",
-                        "Two"
-                };
-
-                AlertDialog dialog = new AlertDialog.Builder(getContext())
-                        .setItems(haha, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(getContext(),haha[which],Toast.LENGTH_LONG).show();
-                            }
-                        })
-                        .setTitle("Title is Me")
-                        .setCancelable(true)
-                        .create();
-                dialog.show();
-            }
-        });
+//        fl_container.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////                Toast.makeText(getContext(),"切换",Toast.LENGTH_SHORT).show();
+////                showPopMenu();
+////                popMenuChooser.showPop();
+//
+//
+//            }
+//        });
 
         bt_parser.setOnClickListener(this);
-        View.generateViewId();
     }
 
     @Override
@@ -102,7 +87,7 @@ public class GifParserFragment extends BaseFragment implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.id_add_file:
-                helper.start2ChooseFile();
+                showPop2GotoFileChooser();
                 break;
             case R.id.bt_parser:
                 Toast.makeText(getContext(), "bt_parser", Toast.LENGTH_SHORT)
@@ -115,6 +100,25 @@ public class GifParserFragment extends BaseFragment implements View.OnClickListe
         }
     }
 
+    private void showPop2GotoFileChooser(){
+        final String[] haha = new String[]{
+                "One",
+                "Two"
+        };
+
+        AlertDialog dialog = new AlertDialog.Builder(getContext())
+                .setItems(haha, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(getContext(),haha[which],Toast.LENGTH_LONG).show();
+                        helper.start2ChooseFile();
+                    }
+                })
+                .setTitle("Title is Me")
+                .setCancelable(true)
+                .create();
+        dialog.show();
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -134,6 +138,7 @@ public class GifParserFragment extends BaseFragment implements View.OnClickListe
             if (check == null) {
                 //do nothing
                 Log.e("test", "null");
+                Toast.makeText(getContext(), getResources().getString(R.string.toast_is_not_gif), Toast.LENGTH_SHORT).show();
             } else if (check) {
                 //gif
                 Log.e("test", "gif");

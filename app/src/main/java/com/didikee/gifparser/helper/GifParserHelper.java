@@ -123,6 +123,8 @@ public class GifParserHelper {
 
     private void add2FlContainer(ImageView imageView) {
         fl_container.removeAllViews();
+        imageView.setId(R.id.id_add_file);
+        imageView.setOnClickListener(frag);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams
                 .MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 //        params.gravity = Gravity.CENTER;
