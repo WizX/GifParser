@@ -16,14 +16,14 @@
         android:layout_height="wrap_content"
         >
 
-        <ImageView
+        <!--<ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@drawable/md_ripple_white"
             android:clickable="true"
             android:src="@drawable/ic_add_file"
-            />
+            />-->
     </FrameLayout>
 
     <Button
