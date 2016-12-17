@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <string-array name="gif_parser_tab">
-        <item>parser</item>
-        <item>history</item>
-    </string-array>
-</resources>

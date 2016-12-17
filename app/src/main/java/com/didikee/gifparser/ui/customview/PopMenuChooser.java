@@ -13,7 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.PopupWindow;
 
 import com.didikee.gifparser.R;
-import com.didikee.gifparser.files.UIUtil;
+import com.didikee.gifparser.utils.UIUtil;
 import com.didikee.uilibs.views.MaxHeightListView;
 
 /**

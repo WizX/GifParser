@@ -35,7 +35,9 @@
         android:layout_marginBottom="12dp"
         android:background="@drawable/md_colorprimarydark_bound"
         android:layout_alignParentBottom="true"
-        android:text="解析"
+        android:text="@string/parse"
+        android:textSize="16sp"
+        android:textColor="@color/white"
         />
     <!--<Button
         android:id="@+id/bt_open_file"

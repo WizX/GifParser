@@ -1,4 +1,4 @@
-package com.didikee.gifparser.files;
+package com.didikee.gifparser.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -56,6 +56,7 @@ public class Uri2Path {
                     cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
             result = cursor.getString(column_index);
+            cursor.close();
         }
         return result;
     }
@@ -66,6 +67,8 @@ public class Uri2Path {
         int column_index
                 = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
         cursor.moveToFirst();
-        return cursor.getString(column_index);
+        String result = cursor.getString(column_index);
+        cursor.close();
+        return result;
     }
 }

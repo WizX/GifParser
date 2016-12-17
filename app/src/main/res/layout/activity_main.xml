@@ -5,18 +5,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     tools:context="com.didikee.gifparser.ui.MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <!--<LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">-->
+        android:theme="@style/AppTheme.AppBarOverlay"
+        >
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -36,8 +31,6 @@
                 android:layout_marginRight="36dp"
 
                 />
-        <!--</LinearLayout>-->
-
     </android.support.design.widget.AppBarLayout>
 
     <!--<include layout="@layout/content_main"/>-->

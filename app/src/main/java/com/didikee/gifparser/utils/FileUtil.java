@@ -1,4 +1,4 @@
-package com.didikee.gifparser.files;
+package com.didikee.gifparser.utils;
 
 import android.text.TextUtils;
 import android.util.Log;

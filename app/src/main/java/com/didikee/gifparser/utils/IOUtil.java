@@ -1,4 +1,4 @@
-package com.didikee.gifparser.files;
+package com.didikee.gifparser.utils;
 
 /**
  * Created by didik on 2016/12/17.

@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.util.Pair;
 
-import com.didikee.gifparser.files.FileUtil;
+import com.didikee.gifparser.utils.FileUtil;
 import com.didikee.gifparser.gifs.gif.GifDecoder;
 
 import java.io.File;
