@@ -1,6 +1,9 @@
 package com.didikee.gifparser.helper;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -14,12 +17,14 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.didikee.gifparser.R;
+import com.didikee.gifparser.gifs.AsyncGifParser;
 import com.didikee.gifparser.gifs.GifImageView;
 import com.didikee.gifparser.ui.frag.GifParserFragment;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 /**
@@ -32,14 +37,70 @@ public class GifParserHelper {
 
     private final FrameLayout fl_container;
     private final GifParserFragment frag;
+    private final Context context;
+    private final Resources res;
 
     public GifParserHelper(@NonNull GifParserFragment frag,@NonNull FrameLayout container) {
         this.frag=frag;
         this.fl_container=container;
+        this.context=frag.getContext();
+        res = frag.getResources();
+
     }
 
-    public void parserGif2File() {
+    public void parserGif2File(String parserPath) {
+        if (TextUtils.isEmpty(parserPath)){
+            Toast.makeText(frag.getContext(),"this is Not a gif or file path is EMPTY!",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        final ProgressDialog progressDialog;
+        progressDialog = new ProgressDialog(context);
+        progressDialog.setMax(100);
+        progressDialog.setMessage(res.getString(R.string.title_gif_parsing));
+        progressDialog.setTitle(res.getString(R.string.content_wait));
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.show();
 
+//        int lastIndex = parserPath.lastIndexOf("/");
+//        String saveDir = parserPath.substring(0, lastIndex);
+        final AsyncGifParser asyncGifParser=new AsyncGifParser(parserPath){
+            int total=0;
+            @Override
+            protected void onProgressUpdate(Integer... values) {
+                super.onProgressUpdate(values);
+                int value=0;
+                if (values.length==2){
+                    total=values[0];
+                }else {
+                    try {
+                        value = values[0];
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if (total!=0){
+                        value = (int) (((value* 1.0f) / total) * 100);
+                    }
+                }
+                progressDialog.setProgress(value);
+                if (value>=100){
+                    progressDialog.dismiss();
+                }
+
+            }
+        };
+        FileInputStream inputStream=null;
+        try {
+            inputStream = new FileInputStream(parserPath);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            progressDialog.dismiss();
+        }
+        if (inputStream ==null){
+            Toast.makeText(context,"is is null",Toast.LENGTH_SHORT).show();
+            progressDialog.dismiss();
+            return;
+        }
+        asyncGifParser.execute(inputStream);
     }
 
     public void start2ChooseFile() {
@@ -123,6 +184,8 @@ public class GifParserHelper {
 
     private void add2FlContainer(ImageView imageView) {
         fl_container.removeAllViews();
+        imageView.setId(R.id.id_add_file);
+        imageView.setOnClickListener(frag);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams
                 .MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 //        params.gravity = Gravity.CENTER;

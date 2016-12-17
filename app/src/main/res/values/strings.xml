@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">GifParser</string>
     <string name="action_settings">Settings</string>
+
+    <string name="title_gif_parsing">GIF Parsing</string>
+    <string name="content_wait">please wait for a minute</string>
+
+    <string name="title_choose">Choose a Action</string>
 </resources>

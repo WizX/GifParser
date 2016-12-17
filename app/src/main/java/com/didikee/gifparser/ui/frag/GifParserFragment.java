@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -30,7 +31,10 @@ public class GifParserFragment extends BaseFragment implements View.OnClickListe
     private Button bt_parser;
     private String testPath = "/storage/emulated/0/gif/";
     private String testPath2 = "/storage/emulated/0/ickeck/ac";
+    private String parserPath="";//需要解析的gif图片的路径
+    private String preParserPath="";
     private GifParserHelper helper;
+    private AlertDialog dialog;
 
     @Override
     public int getLayoutId() {
@@ -42,53 +46,12 @@ public class GifParserFragment extends BaseFragment implements View.OnClickListe
         fl_container = ((FrameLayout) inflateView.findViewById(R.id.fl_container));
         bt_parser = ((Button) inflateView.findViewById(R.id.bt_parser));
         helper = new GifParserHelper(this,fl_container);
-
-//        inflateView.findViewById(R.id.bt_open_file).setOnClickListener(new View.OnClickListener
-// () {
-//            @Override
-//            public void onClick(View v) {
-////                boolean b = openFileAccessFileManager(testPath2);
-////                if (b){
-////                    Log.e("test","yes is open");
-////                }else {
-////                    Log.e("test","no! some error come out!");
-////                }
-//                openFolder(testPath);
-//            }
-//        });
-
         helper.setDefaultFlContainer();
-
     }
 
     @Override
     public void registerListener() {
-        fl_container.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                Toast.makeText(getContext(),"切换",Toast.LENGTH_SHORT).show();
-//                showPopMenu();
-//                popMenuChooser.showPop();
-
-                final String[] haha = new String[]{
-                        "One",
-                        "Two"
-                };
-
-                AlertDialog dialog = new AlertDialog.Builder(getContext())
-                        .setItems(haha, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(getContext(),haha[which],Toast.LENGTH_LONG).show();
-                            }
-                        })
-                        .setTitle("Title is Me")
-                        .setCancelable(true)
-                        .create();
-                dialog.show();
-            }
-        });
-
+        fl_container.setOnClickListener(this);
         bt_parser.setOnClickListener(this);
         View.generateViewId();
     }
@@ -102,17 +65,43 @@ public class GifParserFragment extends BaseFragment implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.id_add_file:
-                helper.start2ChooseFile();
+                showChooserDialog();
                 break;
             case R.id.bt_parser:
-                Toast.makeText(getContext(), "bt_parser", Toast.LENGTH_SHORT)
+                Toast.makeText(getContext(), "bt_parser: "+ parserPath, Toast.LENGTH_SHORT)
                         .show();
+                if (preParserPath.equalsIgnoreCase(parserPath)){
+                    Toast.makeText(getContext(), "已经解析过了 =V= ", Toast.LENGTH_SHORT)
+                            .show();
+                }else {
+                    helper.parserGif2File(parserPath);
+                    preParserPath=parserPath;
+                }
+
                 break;
             default:
                 Toast.makeText(getContext(), "can not find avialable id", Toast.LENGTH_SHORT)
                         .show();
                 break;
         }
+    }
+
+    private void showChooserDialog(){
+        final String[] tab=getResources().getStringArray(R.array.gif_parser_tab);
+        if (dialog==null){
+            dialog = new AlertDialog.Builder(getContext())
+                    .setItems(tab, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            helper.start2ChooseFile();
+                            Toast.makeText(getContext(),tab[which],Toast.LENGTH_LONG).show();
+                        }
+                    })
+                    .setTitle(getResources().getString(R.string.title_choose))
+                    .setCancelable(true)
+                    .create();
+        }
+        dialog.show();
     }
 
 
@@ -134,14 +123,17 @@ public class GifParserFragment extends BaseFragment implements View.OnClickListe
             if (check == null) {
                 //do nothing
                 Log.e("test", "null");
+                parserPath="";
             } else if (check) {
                 //gif
                 Log.e("test", "gif");
                 helper.displayGifFromSDCard(finalPath);
+                parserPath=finalPath;
             } else {
                 //img
                 Log.e("test", "img");
                 helper.displayImgFromSDCard(finalPath);
+                parserPath="";
             }
 
         }
