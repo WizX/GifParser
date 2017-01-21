@@ -76,6 +76,7 @@ public class GifParserFragment extends BaseFragment implements View.OnClickListe
             default:
                 Toast.makeText(getContext(), "can not find avialable id", Toast.LENGTH_SHORT)
                         .show();
+
                 break;
         }
     }
