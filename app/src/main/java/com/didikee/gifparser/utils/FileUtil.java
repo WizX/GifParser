@@ -1,8 +1,10 @@
-package com.didikee.gifparser.files;
+package com.didikee.gifparser.utils;
 
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
+
+import java.io.File;
 
 /**
  * Created by didik 
@@ -36,13 +38,39 @@ public class FileUtil {
         return null;
     }
 
+    /**
+     * 获取文件名 与 文件所在目录
+     * @param filePath 文件绝对路径
+     * @return 文件名 与 文件所在目录的绝对路径
+     */
     public static Pair<String,String> getFilePathDetail(String filePath){
         if (TextUtils.isEmpty(filePath) || !filePath.contains(".")) {
             return null;
         }
         int lastIndex = filePath.lastIndexOf(".");
-        String first=filePath.substring(0,lastIndex+1);
+        String first=filePath.substring(0,lastIndex);
         String second=filePath.substring(lastIndex+1,filePath.length());
         return new Pair<>(first,second);
+    }
+
+    /**
+     * 获取文件路径名称:.../gif/demo/save
+     * 获取文件名: demo.jpg --> demo
+     * @param filePath
+     * @return
+     */
+    public static Pair<String,String> getFileAndDirName(String filePath){
+        File check=new File(filePath);
+        if (check.isDirectory()){
+            return new Pair<>(filePath,"");
+        }
+        String parent = check.getParent();
+        String name = check.getName();
+
+        if (name.contains(".")){
+            int lastIndex = name.lastIndexOf(".");
+            name=name.substring(0,lastIndex);
+        }
+        return new Pair<>(parent,name);
     }
 }

@@ -13,14 +13,16 @@ import java.util.List;
  * Description: 
  */
 
-public class MainFragmentPagerAdapter extends FragmentPagerAdapter{
-    private List<Fragment> frags=new ArrayList<>();
-    private String tabTitles[] = new String[]{"tab1","tab2","tab3"};
+public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
+    private List<Fragment> frags = new ArrayList<>();
+    private String tabTitles[] ;
 
-
-    public void setFragments(List<Fragment> fragments){
-        this.frags=fragments;
+    public MainFragmentPagerAdapter(FragmentManager fm, List<Fragment> frags, String[] tabTitles) {
+        super(fm);
+        this.frags = frags;
+        this.tabTitles = tabTitles;
     }
+
     public MainFragmentPagerAdapter(FragmentManager fm) {
         super(fm);
     }

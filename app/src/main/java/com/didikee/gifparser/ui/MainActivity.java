@@ -1,12 +1,15 @@
 package com.didikee.gifparser.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.didikee.gifparser.R;
 import com.didikee.gifparser.adapter.MainFragmentPagerAdapter;
@@ -21,30 +24,36 @@ public class MainActivity extends AppCompatActivity {
 
     private TabLayout tab_layout;
     private ViewPager viewPager;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
-
     }
 
 
     private void init() {
+        initToolBar();
         tab_layout = ((TabLayout) findViewById(R.id.tab_layout));
         viewPager = ((ViewPager) findViewById(R.id.viewpager));
 
-        MainFragmentPagerAdapter pagerAdapter = new MainFragmentPagerAdapter
-                (getSupportFragmentManager());
+
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(new GifParserFragment());
         fragments.add(new HistoryFragment());
-        pagerAdapter.setFragments(fragments);
+        MainFragmentPagerAdapter pagerAdapter = new MainFragmentPagerAdapter
+                (getSupportFragmentManager(),fragments,getResources().getStringArray(R.array.gif_parser_tab));
         viewPager.setAdapter(pagerAdapter);
         tab_layout.setupWithViewPager(viewPager);
         tab_layout.setTabMode(TabLayout.MODE_FIXED);
         tab_layout.setTabGravity(TabLayout.GRAVITY_FILL);
+    }
+
+    private void initToolBar() {
+        toolbar = ((Toolbar) findViewById(R.id.toolbar));
+        setSupportActionBar(toolbar);
     }
 
 
@@ -57,16 +66,24 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        boolean result;
+        switch (item.getItemId()){
+            case R.id.action_settings:
+                Toast.makeText(this,getResources().getString(R.string.author),Toast.LENGTH_SHORT).show();
+                result=true;
+                break;
+            case R.id.action_about:
+                startActivity(new Intent(this,AboutActivity.class));
+                result=true;
+                break;
+            /*case R.id.action_help:
+                Toast.makeText(this,"cooming soon! =.= ",Toast.LENGTH_SHORT).show();
+                result=true;
+                break;*/
+            default:
+                result=super.onOptionsItemSelected(item);
+                break;
         }
-
-        return super.onOptionsItemSelected(item);
+        return result;
     }
 }

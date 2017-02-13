@@ -1,16 +1,11 @@
 package com.didikee.gifparser.ui.frag;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.PopupWindow;
-import android.widget.TextView;
 
 import com.didikee.gifparser.R;
 import com.didikee.gifparser.adapter.MyTestRvAdapter;
@@ -39,32 +34,30 @@ public class HistoryFragment extends BaseFragment{
 
     @Override
     public void registerListener() {
-//        bt_show_pop.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                showPop();
-//            }
-//        });
     }
 
-    private void showPop() {
-        TextView textView=new TextView(getContext());
-        textView.setText("你好啊,朋友!");
-        textView.setBackgroundColor(Color.BLUE);
-        textView.setGravity(Gravity.CENTER);
-//        PopupWindow popupWindow=new PopupWindow(LayoutInflater.from(getContext()).inflate(R.layout.pop,null,false), ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        PopupWindow popupWindow=new PopupWindow(textView, ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindow.setOutsideTouchable(true);
-        popupWindow.showAsDropDown(bt_show_pop);
-    }
 
     @Override
     protected void startFlow() {
         initListview();
     }
 
-    private String[] data = { "Apple", "Banana", "Orange",     "Watermelon",
-            "Pear", "Grape", "Pineapple", "Strawberry", "Cherry", "Mango" ,"Mango","Mango","Mango","Mango","Mango","Mango"};
+    private String[] data = {
+            "       c",
+            "       o",
+            "       o",
+            "       m",
+            "       i",
+            "       n",
+            "       g",
+            "        ",
+            "       s",
+            "       o",
+            "       o",
+            "       n",
+            "       !",
+            "     =.="
+    };
     private void initListview() {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 getContext(), android.R.layout.simple_list_item_1, data);

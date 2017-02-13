@@ -7,18 +7,15 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.didikee.gifparser.R;
-import com.didikee.gifparser.files.FileUtil;
-import com.didikee.gifparser.files.Uri2Path;
 import com.didikee.gifparser.helper.GifParserHelper;
-
-import java.math.BigInteger;
+import com.didikee.gifparser.utils.FileUtil;
+import com.didikee.gifparser.utils.Uri2Path;
 
 /**
  * Created by didik 
@@ -30,8 +27,10 @@ public class GifParserFragment extends BaseFragment implements View.OnClickListe
 
     private FrameLayout fl_container;
     private Button bt_parser;
-    private String gifPath="";
+    private String parserPath="";//需要解析的gif图片的路径
+    private String preParserPath="";
     private GifParserHelper helper;
+    private AlertDialog dialog;
 
     @Override
     public int getLayoutId() {
@@ -43,39 +42,14 @@ public class GifParserFragment extends BaseFragment implements View.OnClickListe
         fl_container = ((FrameLayout) inflateView.findViewById(R.id.fl_container));
         bt_parser = ((Button) inflateView.findViewById(R.id.bt_parser));
         helper = new GifParserHelper(this,fl_container);
-
-//        inflateView.findViewById(R.id.bt_open_file).setOnClickListener(new View.OnClickListener
-// () {
-//            @Override
-//            public void onClick(View v) {
-////                boolean b = openFileAccessFileManager(testPath2);
-////                if (b){
-////                    Log.e("test","yes is open");
-////                }else {
-////                    Log.e("test","no! some error come out!");
-////                }
-//                openFolder(testPath);
-//            }
-//        });
-
         helper.setDefaultFlContainer();
-        Log.e("test","int: "+Integer.MAX_VALUE+"big int: "+ BigInteger.ONE);
     }
 
     @Override
     public void registerListener() {
-//        fl_container.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-////                Toast.makeText(getContext(),"切换",Toast.LENGTH_SHORT).show();
-////                showPopMenu();
-////                popMenuChooser.showPop();
-//
-//
-//            }
-//        });
-
+        fl_container.setOnClickListener(this);
         bt_parser.setOnClickListener(this);
+        View.generateViewId();
     }
 
     @Override
@@ -87,38 +61,44 @@ public class GifParserFragment extends BaseFragment implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.id_add_file:
-                showPop2GotoFileChooser();
+                showChooserDialog();
                 break;
             case R.id.bt_parser:
-                Toast.makeText(getContext(), "bt_parser", Toast.LENGTH_SHORT)
-                        .show();
+                if (preParserPath.equalsIgnoreCase(parserPath)){
+                    Toast.makeText(getContext(), getResources().getString(R.string.error_has_parse), Toast.LENGTH_SHORT)
+                            .show();
+                }else {
+                    helper.parserGif2File(parserPath);
+                    preParserPath=parserPath;
+                }
+
                 break;
             default:
                 Toast.makeText(getContext(), "can not find avialable id", Toast.LENGTH_SHORT)
                         .show();
+
                 break;
         }
     }
 
-    private void showPop2GotoFileChooser(){
-        final String[] haha = new String[]{
-                "One",
-                "Two"
-        };
-
-        AlertDialog dialog = new AlertDialog.Builder(getContext())
-                .setItems(haha, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getContext(),haha[which],Toast.LENGTH_LONG).show();
-                        helper.start2ChooseFile();
-                    }
-                })
-                .setTitle("Title is Me")
-                .setCancelable(true)
-                .create();
+    private void showChooserDialog(){
+        final String[] tab=getResources().getStringArray(R.array.gif_parser_choose);
+        if (dialog==null){
+            dialog = new AlertDialog.Builder(getContext())
+                    .setItems(tab, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            helper.start2ChooseFile();
+                            Toast.makeText(getContext(),tab[which],Toast.LENGTH_LONG).show();
+                        }
+                    })
+                    .setTitle(getResources().getString(R.string.title_choose))
+                    .setCancelable(true)
+                    .create();
+        }
         dialog.show();
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -137,16 +117,18 @@ public class GifParserFragment extends BaseFragment implements View.OnClickListe
             Boolean check = FileUtil.checkFileType(finalPath);
             if (check == null) {
                 //do nothing
-                Log.e("test", "null");
-                Toast.makeText(getContext(), getResources().getString(R.string.toast_is_not_gif), Toast.LENGTH_SHORT).show();
+//                Log.e("test", "null");
+                parserPath="";
             } else if (check) {
                 //gif
-                Log.e("test", "gif");
+//                Log.e("test", "gif");
                 helper.displayGifFromSDCard(finalPath);
+                parserPath=finalPath;
             } else {
                 //img
-                Log.e("test", "img");
+//                Log.e("test", "img");
                 helper.displayImgFromSDCard(finalPath);
+                parserPath="";
             }
 
         }

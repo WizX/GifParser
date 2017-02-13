@@ -3,7 +3,9 @@ package com.didikee.gifparser.gifs;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.util.Pair;
 
+import com.didikee.gifparser.utils.FileUtil;
 import com.didikee.gifparser.gifs.gif.GifDecoder;
 
 import java.io.File;
@@ -18,7 +20,7 @@ public class AsyncGifParser extends AsyncTask<InputStream, Integer, Void> {
 
     private File targetFile;
     private String targetStringPath;
-    private int quality=90;
+    private int quality=100;
 
     public AsyncGifParser(File targetLocal) {
         this.targetFile = targetLocal;
@@ -26,6 +28,20 @@ public class AsyncGifParser extends AsyncTask<InputStream, Integer, Void> {
 
     public AsyncGifParser(String targetLocalString) {
         this.targetStringPath = targetLocalString;
+        makeSaveFile();
+    }
+
+    private void makeSaveFile() {
+        Pair<String, String> filePathDetail = FileUtil.getFileAndDirName(targetStringPath);
+        targetStringPath=filePathDetail.first +File.separatorChar+filePathDetail.second+File.separatorChar;
+        File file=new File(targetStringPath);
+        if (!file.exists()){
+            boolean mkdirs = file.mkdirs();
+            if (!mkdirs){
+                Log.e("test","失败了,创建文件夹");
+            }
+        }
+        targetFile=file;
     }
 
     public void setQuality(int quality){
@@ -44,7 +60,7 @@ public class AsyncGifParser extends AsyncTask<InputStream, Integer, Void> {
         GifDecoder gifDecoder = new GifDecoder();
         gifDecoder.read(target, 10240);
         int frameCount = gifDecoder.getFrameCount();
-        publishProgress(new Integer[]{frameCount+1,0});
+        publishProgress(new Integer[]{frameCount,0});
 
         Bitmap tmpBitmap;
         for (int i = 0; i < frameCount; i++) {
@@ -65,7 +81,7 @@ public class AsyncGifParser extends AsyncTask<InputStream, Integer, Void> {
         } else {
             f = new File(targetFile, (index + 1) + ".png");
         }
-
+        Log.e("test","file: "+f.getAbsolutePath());
         if (f.exists()) {
             f.delete();
         }
