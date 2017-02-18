@@ -1,20 +1,4 @@
-# Add project specific ProGuard rules here.
-# By default, the flags in this file are appended to flags specified
-# in D:\Android_Tools\sdk/tools/proguard/proguard-android.txt
-# You can edit the include path and order by changing the proguardFiles
-# directive in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
-
-# Add any project specific keep options here:
-
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+################ default config start #################
 -optimizationpasses 5                                                           # 指定代码的压缩级别
 -dontusemixedcaseclassnames                                                     # 是否使用大小写混合
 -dontskipnonpubliclibraryclasses                                                # 是否混淆第三方jar
@@ -56,14 +40,79 @@
   public static final android.os.Parcelable$Creator *;
 }
 
-#-keep class MyClass;                                                            # 保持自己定义的类不被混淆
-
-##### DO NOT Modify ####
-#如果有引用v4包可以添加下面这行
+#v4包
 -keep class android.support.v4.** { *; }
 -keep public class * extends android.support.v4.**
 -keep public class * extends android.app.Fragment
 
+#保持自定义组件不被混淆
+-keep public class * extends android.view.View {
+    public <init>(android.content.Context);
+    public <init>(android.content.Context, android.util.AttributeSet);
+    public <init>(android.content.Context, android.util.AttributeSet, int);
+    public void set*(...);
+}
 
-#如果引用了v4或者v7包，可以忽略警告，因为用不到android.support
--dontwarn android.support.**
+#保持 Serializable 不被混淆
+-keepnames class * implements java.io.Serializable
+
+-keep class * implements android.os.Parcelable {
+
+public static final android.os.Parcelable$Creator *;
+
+}
+################ default config end #################
+# jsoup
+-keep class org.jsoup.**
+# picasso
+-dontwarn com.squareup.okhttp.**
+# glide
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
+  **[] $VALUES;
+  public *;
+}
+# Gson
+-keep class sun.misc.Unsafe { *; }
+-keep class com.google.gson.stream.** { *; }
+# 使用Gson时需要配置Gson的解析对象及变量都不混淆。不然Gson会找不到变量。
+# 将下面替换成自己的实体类
+-keep class com.didikee.bingpicture.network.bean.** { *; }
+# butterknife
+-keep class butterknife.** { *; }
+-dontwarn butterknife.internal.**
+-keep class **$$ViewBinder { *; }
+-keepclasseswithmembernames class * {
+    @butterknife.* <fields>;
+}
+-keepclasseswithmembernames class * {
+    @butterknife.* <methods>;
+}
+# retrofit
+-dontwarn retrofit2.**
+-keep class retrofit2.** { *; }
+-keepattributes Signature
+-keepattributes Exceptions
+# rxjava rxandroid
+-dontwarn sun.misc.**
+-keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
+   long producerIndex;
+   long consumerIndex;
+}
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
+    rx.internal.util.atomic.LinkedQueueNode producerNode;
+}
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueConsumerNodeRef {
+    rx.internal.util.atomic.LinkedQueueNode consumerNode;
+}
+# OkHttp3
+-dontwarn com.squareup.okhttp3.**
+-keep class com.squareup.okhttp3.** { *;}
+-dontwarn okio.**
+
+
+# Okio
+-dontwarn com.squareup.**
+-dontwarn okio.**
+-keep public class org.codehaus.* { *; }
+-keep public class java.nio.* { *; }

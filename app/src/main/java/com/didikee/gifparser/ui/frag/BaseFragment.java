@@ -37,6 +37,8 @@ public abstract class BaseFragment extends Fragment implements IBaseFragment{
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        // 延迟获取Intent数据,防止更新ui出错
+        getIntentDataDelay();
         registerListener();
         startFlow();
     }
@@ -44,6 +46,10 @@ public abstract class BaseFragment extends Fragment implements IBaseFragment{
 
     @Override
     public boolean getIntentData() {
+        return true;
+    }
+    @Override
+    public boolean getIntentDataDelay() {
         return true;
     }
 

@@ -1,21 +1,25 @@
 package com.didikee.gifparser.ui.frag;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.didikee.gifparser.R;
-import com.didikee.gifparser.helper.GifParserHelper;
+import com.didikee.gifparser.constant.IntentKey;
+import com.didikee.gifparser.gifs.helper.GifParserHelper;
+import com.didikee.gifparser.gifs.interf.OnProgressChangeListener;
+import com.didikee.gifparser.ui.ParserFragHelper;
 import com.didikee.gifparser.utils.FileUtil;
-import com.didikee.gifparser.utils.Uri2Path;
+import com.didikee.gifparser.utils.UriUtil;
 
 /**
  * Created by didik 
@@ -29,8 +33,9 @@ public class GifParserFragment extends BaseFragment implements View.OnClickListe
     private Button bt_parser;
     private String parserPath="";//需要解析的gif图片的路径
     private String preParserPath="";
-    private GifParserHelper helper;
     private AlertDialog dialog;
+    private ParserFragHelper fragHelper;
+    private GifParserHelper gifParserHelper;
 
     @Override
     public int getLayoutId() {
@@ -41,8 +46,8 @@ public class GifParserFragment extends BaseFragment implements View.OnClickListe
     public void initView(View inflateView, Bundle savedInstanceState) {
         fl_container = ((FrameLayout) inflateView.findViewById(R.id.fl_container));
         bt_parser = ((Button) inflateView.findViewById(R.id.bt_parser));
-        helper = new GifParserHelper(this,fl_container);
-        helper.setDefaultFlContainer();
+        fragHelper = new ParserFragHelper(this,fl_container);
+        fragHelper.setDefaultFlContainer();
     }
 
     @Override
@@ -50,6 +55,16 @@ public class GifParserFragment extends BaseFragment implements View.OnClickListe
         fl_container.setOnClickListener(this);
         bt_parser.setOnClickListener(this);
         View.generateViewId();
+    }
+
+    @Override
+    public boolean getIntentDataDelay() {
+        Bundle arguments = getArguments();
+        if (arguments != null ){
+            Uri uri = arguments.getParcelable(IntentKey.URI);
+            handleUri(uri);
+        }
+        return true;
     }
 
     @Override
@@ -68,15 +83,45 @@ public class GifParserFragment extends BaseFragment implements View.OnClickListe
                     Toast.makeText(getContext(), getResources().getString(R.string.error_has_parse), Toast.LENGTH_SHORT)
                             .show();
                 }else {
-                    helper.parserGif2File(parserPath);
+                    //check
+                    if (TextUtils.isEmpty(parserPath)){
+                        Toast.makeText(getContext(),"this is Not a gif or file path is EMPTY!",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    final ProgressDialog progressDialog;
+                    progressDialog = new ProgressDialog(getContext());
+                    progressDialog.setMax(100);
+                    progressDialog.setMessage(getContext().getResources().getString(R.string.title_gif_parsing));
+                    progressDialog.setTitle(getContext().getResources().getString(R.string.content_wait));
+                    progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                    progressDialog.show();
+
+                    gifParserHelper =new GifParserHelper(parserPath);
+                    gifParserHelper.setProgressChangeListener(new OnProgressChangeListener() {
+                        @Override
+                        public void prepare(int total) {
+                            progressDialog.setMax(total);
+                        }
+
+                        @Override
+                        public void onProgressChange(int current, int total, int percent) {
+                            progressDialog.setProgress(current);
+                        }
+
+                        @Override
+                        public void onFinish(boolean error) {
+                            progressDialog.dismiss();
+                            if (error){
+                                Toast.makeText(getContext(),"解析失败",Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                    gifParserHelper.parser();
                     preParserPath=parserPath;
                 }
 
                 break;
             default:
-                Toast.makeText(getContext(), "can not find avialable id", Toast.LENGTH_SHORT)
-                        .show();
-
                 break;
         }
     }
@@ -88,7 +133,7 @@ public class GifParserFragment extends BaseFragment implements View.OnClickListe
                     .setItems(tab, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            helper.start2ChooseFile();
+                            fragHelper.start2ChooseFile();
                             Toast.makeText(getContext(),tab[which],Toast.LENGTH_LONG).show();
                         }
                     })
@@ -99,39 +144,31 @@ public class GifParserFragment extends BaseFragment implements View.OnClickListe
         dialog.show();
     }
 
+    private void handleUri(Uri uri){
+        String finalPath = UriUtil.getPathFromUri(getContext(),uri);
+        Toast.makeText(getContext(), finalPath, Toast.LENGTH_SHORT).show();
+        Boolean check = FileUtil.checkFileType(finalPath);
+        if (check == null) {
+            //do nothing
+            parserPath="";
+        } else if (check) {
+            //gif
+            fragHelper.displayGifFromSDCard(finalPath);
+            parserPath=finalPath;
+        } else {
+            //img
+            fragHelper.displayImgFromSDCard(finalPath);
+            parserPath="";
+        }
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {//是否选择，没选择就不会继续
-            Uri uri = data.getData();//得到uri，后面就是将uri转化成file的过程
-            String finalPath = "";
-            int sdkInt = Build.VERSION.SDK_INT;
-            if (sdkInt >= 19) {
-                finalPath = Uri2Path.getRealPathFromURI_API19(getContext(), uri);
-            } else if (sdkInt >= 11 && sdkInt < 19) {
-                finalPath = Uri2Path.getRealPathFromURI_API11to18(getContext(), uri);
-            } else {
-                finalPath = Uri2Path.getRealPathFromURI_BelowAPI11(getContext(), uri);
-            }
-            Toast.makeText(getContext(), finalPath, Toast.LENGTH_SHORT).show();
-            Boolean check = FileUtil.checkFileType(finalPath);
-            if (check == null) {
-                //do nothing
-//                Log.e("test", "null");
-                parserPath="";
-            } else if (check) {
-                //gif
-//                Log.e("test", "gif");
-                helper.displayGifFromSDCard(finalPath);
-                parserPath=finalPath;
-            } else {
-                //img
-//                Log.e("test", "img");
-                helper.displayImgFromSDCard(finalPath);
-                parserPath="";
-            }
-
+            handleUri(data.getData());
         }
     }
+
 
 }

@@ -4,45 +4,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingBottom="56dp"
+    android:paddingBottom="@dimen/md_item_small_height"
     >
 
     <FrameLayout
         android:id="@+id/fl_container"
-        android:layout_margin="12dp"
-        android:layout_alignParentTop="true"
-        android:layout_above="@+id/bt_parser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/bt_parser"
+        android:layout_alignParentTop="true"
+        android:layout_margin="12dp"
         >
 
-        <!--<ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@drawable/md_ripple_white"
-            android:clickable="true"
-            android:src="@drawable/ic_add_file"
-            />-->
     </FrameLayout>
 
     <Button
         android:id="@+id/bt_parser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_marginLeft="36dp"
         android:layout_marginRight="36dp"
-        android:layout_marginBottom="12dp"
         android:background="@drawable/md_colorprimarydark_bound"
-        android:layout_alignParentBottom="true"
         android:text="@string/parse"
-        android:textSize="16sp"
         android:textColor="@color/white"
+        android:textSize="16sp"
         />
-    <!--<Button
-        android:id="@+id/bt_open_file"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="打开文件目录"
-        />-->
 </RelativeLayout>

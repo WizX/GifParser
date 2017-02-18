@@ -18,35 +18,33 @@ import java.io.InputStream;
 
 public class AsyncGifParser extends AsyncTask<InputStream, Integer, Void> {
 
-    private File targetFile;
-    private String targetStringPath;
-    private int quality=100;
+    protected File targetFile;
+    protected final String parserPath;
+    private int quality = 100;
 
-    public AsyncGifParser(File targetLocal) {
-        this.targetFile = targetLocal;
-    }
 
-    public AsyncGifParser(String targetLocalString) {
-        this.targetStringPath = targetLocalString;
+    public AsyncGifParser(String parserPath) {
+        this.parserPath = parserPath;
         makeSaveFile();
     }
 
     private void makeSaveFile() {
-        Pair<String, String> filePathDetail = FileUtil.getFileAndDirName(targetStringPath);
-        targetStringPath=filePathDetail.first +File.separatorChar+filePathDetail.second+File.separatorChar;
-        File file=new File(targetStringPath);
-        if (!file.exists()){
+        Pair<String, String> filePathDetail = FileUtil.getFileAndDirName(parserPath);
+        String targetStringPath = filePathDetail.first + File.separatorChar + filePathDetail
+                .second + File.separatorChar;
+        File file = new File(targetStringPath);
+        if (!file.exists()) {
             boolean mkdirs = file.mkdirs();
-            if (!mkdirs){
-                Log.e("test","失败了,创建文件夹");
+            if (!mkdirs) {
+                Log.e("test", "失败了,创建文件夹");
             }
         }
-        targetFile=file;
+        targetFile = file;
     }
 
-    public void setQuality(int quality){
-        if (quality>100 || quality <=0)return;
-        this.quality=quality;
+    public void setQuality(int quality) {
+        if (quality > 100 || quality <= 0) return;
+        this.quality = quality;
     }
 
     @Override
@@ -60,28 +58,22 @@ public class AsyncGifParser extends AsyncTask<InputStream, Integer, Void> {
         GifDecoder gifDecoder = new GifDecoder();
         gifDecoder.read(target, 10240);
         int frameCount = gifDecoder.getFrameCount();
-        publishProgress(new Integer[]{frameCount,0});
+        publishProgress(new Integer[]{frameCount, 0});
 
         Bitmap tmpBitmap;
         for (int i = 0; i < frameCount; i++) {
             gifDecoder.setFrameIndex(i);
-            publishProgress(i+1);
+            publishProgress(i + 1);
             int currentFrameIndex = gifDecoder.getCurrentFrameIndex();
-            Log.d("test","currentFrameIndex: "+currentFrameIndex);
+            Log.d("test", "currentFrameIndex: " + currentFrameIndex);
             tmpBitmap = gifDecoder.getNextFrame();
-            saveBitmap(tmpBitmap,currentFrameIndex);
+            saveBitmap(tmpBitmap, currentFrameIndex);
         }
     }
 
     private void saveBitmap(Bitmap bm, int index) {
-        if (bm == null)return;
-        File f;
-        if (targetFile == null) {
-            f = new File(targetStringPath, (index + 1) + ".png");
-        } else {
-            f = new File(targetFile, (index + 1) + ".png");
-        }
-        Log.e("test","file: "+f.getAbsolutePath());
+        if (bm == null) return;
+        File f = new File(targetFile, fixNum(index + 1) + ".png");
         if (f.exists()) {
             f.delete();
         }
@@ -93,6 +85,19 @@ public class AsyncGifParser extends AsyncTask<InputStream, Integer, Void> {
         } catch (Exception e) {
             e.printStackTrace();
             Log.d("test", "error: " + e.toString());
+        }
+    }
+
+    /**
+     * 文件名统一为 01 02 11 12 ...
+     * @param index 没处理前 1,处理后 01;
+     * @return 11
+     */
+    private String fixNum(int index) {
+        if (index < 10) {
+            return "0" + index;
+        } else {
+            return index + "";
         }
     }
 
