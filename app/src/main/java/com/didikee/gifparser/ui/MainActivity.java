@@ -7,11 +7,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.didikee.gifparser.R;
 import com.didikee.gifparser.constant.IntentKey;
+import com.didikee.gifparser.ui.frag.ChangelogDialog;
 import com.didikee.gifparser.ui.frag.GifParserFragment;
+import com.didikee.gifparser.ui.frag.HelpInfoDialog;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -67,16 +68,20 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         boolean result;
         switch (item.getItemId()){
-            case R.id.action_settings:
+            /*case R.id.action_settings:
                 Toast.makeText(this,getResources().getString(R.string.author),Toast.LENGTH_SHORT).show();
                 result=true;
-                break;
+                break;*/
             case R.id.action_about:
-                startActivity(new Intent(this,AboutActivity.class));
+                clickAbout();
                 result=true;
                 break;
             case R.id.action_help:
-                Toast.makeText(this,"cooming soon! =.= ",Toast.LENGTH_SHORT).show();
+                clickHelp();
+                result=true;
+                break;
+            case R.id.action_changelog:
+                clickChangeLog();
                 result=true;
                 break;
             default:
@@ -84,5 +89,19 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         return result;
+    }
+
+    private void clickHelp(){
+        HelpInfoDialog helpInfoDialog =new HelpInfoDialog();
+        helpInfoDialog.show(getSupportFragmentManager(),"help");
+    }
+
+    private void clickAbout(){
+        startActivity(new Intent(this,AboutActivity.class));
+    }
+
+    private void clickChangeLog(){
+        ChangelogDialog changelogDialog =new ChangelogDialog();
+        changelogDialog.show(getSupportFragmentManager(),"changelog");
     }
 }

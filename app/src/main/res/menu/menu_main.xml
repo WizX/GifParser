@@ -2,11 +2,7 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
       tools:context="com.didikee.gifparser.ui.MainActivity">
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never"/>
+
 
     <item android:id="@+id/action_help"
           android:orderInCategory="1"
@@ -17,4 +13,14 @@
           android:orderInCategory="2"
           android:title="@string/action_about"
           app:showAsAction="never"/>
+
+    <item android:id="@+id/action_changelog"
+          android:orderInCategory="3"
+          android:title="@string/changelog"
+          app:showAsAction="never"/>
+    <!--<item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        app:showAsAction="never"/>-->
 </menu>

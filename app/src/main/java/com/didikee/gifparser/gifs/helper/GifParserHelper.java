@@ -79,4 +79,11 @@ public class GifParserHelper extends AsyncGifParser {
         execute(inputStream);
     }
 
+    public String getSaveFileInfo(){
+        if (targetFile!=null){
+            return targetFile.getAbsolutePath()+ "/";
+        }
+        return "";
+    }
+
 }

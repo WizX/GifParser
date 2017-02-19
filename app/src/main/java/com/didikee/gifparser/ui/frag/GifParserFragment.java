@@ -113,6 +113,11 @@ public class GifParserFragment extends BaseFragment implements View.OnClickListe
                             progressDialog.dismiss();
                             if (error){
                                 Toast.makeText(getContext(),"解析失败",Toast.LENGTH_SHORT).show();
+                            }else {
+                                String saveFileInfo = gifParserHelper.getSaveFileInfo();
+                                if (!TextUtils.isEmpty(saveFileInfo)){
+                                    Toast.makeText(getContext(),"照片保存在 "  + saveFileInfo,Toast.LENGTH_LONG).show();
+                                }
                             }
                         }
                     });
